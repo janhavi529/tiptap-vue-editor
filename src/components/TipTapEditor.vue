@@ -7,9 +7,43 @@
         <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
         Bold
       </button>
+      <button type="button" class="menubar__button" :class="{ 'is-active': isActive.italic() }" @click="commands.italic">
+        Italic
+      </button>
+      <button type="button" class="menubar__button" :class="{ 'is-active': isActive.strike() }" @click="commands.strike">
+        Strike
+      </button>
+      <button type="button" class="menubar__button" :class="{ 'is-active': isActive.underline() }" @click="commands.underline">
+        Underline
+      </button>
+       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.code() }" @click="commands.code">
+        Code
+      </button>
+       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.blockquote() }" @click="commands.blockquote">
+        Blockquote
+      </button>
+      <button type="button" class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 1 }) }" @click="commands.heading({ level: 1})">
+        H1
+      </button>
+      <button type="button" class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 2 }) }" @click="commands.heading({ level: 2 })">
+        H2
+      </button>
+      <button type="button" class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 3 }) }" @click="commands.heading({ level: 3})">
+        H3
+      </button>
+      <button type="button" class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list">
+        Bullet List
+      </button>
+      <button type="button" class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }" @click="commands.ordered_list">
+        Ordered List
+      </button>
+      <button type="button" class="menubar__button" :class="{ 'is-active': isActive.link() }" @click="commands.link">
+        Link
+      </button>
       <button class="menubar__button" :class="{ 'is-active': isActive.table() }" @click="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: true })">
           Create Table
       </button>
+      <span v-if="isActive.table()">
       <button class="menubar__button" :class="{ 'is-active': isActive.table() }" @click="commands.deleteTable()">
           Delete Table
       </button>
@@ -40,7 +74,10 @@
       <button class="menubar__button" :class="{ 'is-active': isActive.table_cell() }" @click="commands.toggleHeaderCell()">
           Toggle Header Cell
       </button>
-      <button class="menubar__button" :class="{ 'is-active': isActive.table_cell() }" @click="commands.toggleCellMerge()">
+      <button class="menubar__button" @click="commands.toggleCellMerge()">
+          Toggle Cell Merge
+      </button>
+      <!-- <button class="menubar__button" :class="{ 'is-active': isActive.table_cell() }" @click="commands.toggleCellMerge()">
           Toggle Cell Merge
       </button>
       <button class="menubar__button" :class="{ 'is-active': isActive.table_cell() }" @click="commands.mergeCells()">
@@ -48,7 +85,14 @@
       </button>
       <button class="menubar__button" :class="{ 'is-active': isActive.table_cell() }" @click="commands.splitCell()">
           Split Cell
-      </button>
+      </button> -->
+      </span>
+      <button type="button" class="menubar__button" @click="commands.undo">
+          Undo <i class="material-icons">undo</i>
+        </button>
+        <button type="button" class="menubar__button" @click="commands.redo">
+          Redo <icon name="redo" />
+        </button>
       <button @click="testHandler(commands, isActive)">
           Test
       </button>
@@ -63,8 +107,25 @@
 <script>
 // Import the basic building blocks
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
-import { Bold, Table, TableCell, TableHeader, TableRow } from 'tiptap-extensions';
-
+import { 
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Code,
+  Blockquote,
+  Heading,
+  BulletList,
+  OrderedList,
+  ListItem,
+  Link,
+  Table,
+  TableCell,
+  TableHeader,
+  TableRow,
+  History
+} from 'tiptap-extensions';
+import Icon from './Icon';
 export default {
   name: 'TipTapEditor',
   props: {
@@ -75,7 +136,8 @@ export default {
   },
   components: {
     EditorContent,
-    EditorMenuBar
+    EditorMenuBar,
+    Icon
   },
   data() {
     return {
@@ -97,10 +159,23 @@ export default {
         content: '',
         extensions: [
           new Bold(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new Code(),
+          new Blockquote(),
+          new Heading({
+            levels: [1, 2, 3],
+          }),
+          new BulletList(),
+          new OrderedList(),
+          new ListItem(),
+          new Link(),
           new Table({ resizable: true }),
           new TableCell(),
           new TableHeader(),
-          new TableRow()
+          new TableRow(),
+          new History()
         ]
       };
 
@@ -146,6 +221,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
+/* TODO: Add icons, styles */
 
 /* .ProseMirror [contenteditable="false"] {
   white-space: normal;
