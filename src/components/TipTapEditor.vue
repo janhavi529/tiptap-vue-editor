@@ -5,22 +5,22 @@
       <!-- TODO: Optimize using a loop and config object -->
       <div class="menubar">
         <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
-        Bold
+        <i class="material-icons">format_bold</i>
       </button>
       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.italic() }" @click="commands.italic">
-        Italic
+        <i class="material-icons">format_italic</i>
       </button>
       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.strike() }" @click="commands.strike">
-        Strike
+        <i class="material-icons">strikethrough_s</i>
       </button>
       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.underline() }" @click="commands.underline">
-        Underline
+        <i class="material-icons">format_underline</i>
       </button>
        <button type="button" class="menubar__button" :class="{ 'is-active': isActive.code() }" @click="commands.code">
-        Code
+        <i class="material-icons">code</i>
       </button>
        <button type="button" class="menubar__button" :class="{ 'is-active': isActive.blockquote() }" @click="commands.blockquote">
-        Blockquote
+        <i class="material-icons">format_quote</i>
       </button>
       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 1 }) }" @click="commands.heading({ level: 1})">
         H1
@@ -31,17 +31,26 @@
       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 3 }) }" @click="commands.heading({ level: 3})">
         H3
       </button>
+      <!-- <v-select
+          item-text="name"
+          item-value="value"
+          v-model="selectedHeading"
+          @click="headingHandler(commands, isActive)"
+          :items="headingOptions"
+          label="Heading"
+          solo
+        ></v-select> -->
       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list">
-        Bullet List
+        <i class="material-icons">format_list_bulleted</i>
       </button>
       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }" @click="commands.ordered_list">
-        Ordered List
+        <i class="material-icons">format_list_numbered</i>
       </button>
       <button type="button" class="menubar__button" :class="{ 'is-active': isActive.link() }" @click="commands.link">
-        Link
+        <i class="material-icons">link</i>
       </button>
       <button class="menubar__button" :class="{ 'is-active': isActive.table() }" @click="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: true })">
-          Create Table
+          <i class="material-icons">table_view</i>
       </button>
       <span v-if="isActive.table()">
       <button class="menubar__button" :class="{ 'is-active': isActive.table() }" @click="commands.deleteTable()">
@@ -74,24 +83,21 @@
       <button class="menubar__button" :class="{ 'is-active': isActive.table_cell() }" @click="commands.toggleHeaderCell()">
           Toggle Header Cell
       </button>
-      <button class="menubar__button" @click="commands.toggleCellMerge()">
-          Toggle Cell Merge
-      </button>
       <!-- <button class="menubar__button" :class="{ 'is-active': isActive.table_cell() }" @click="commands.toggleCellMerge()">
           Toggle Cell Merge
-      </button>
+      </button> -->
       <button class="menubar__button" :class="{ 'is-active': isActive.table_cell() }" @click="commands.mergeCells()">
           Merge Cells
       </button>
       <button class="menubar__button" :class="{ 'is-active': isActive.table_cell() }" @click="commands.splitCell()">
           Split Cell
-      </button> -->
+      </button>
       </span>
       <button type="button" class="menubar__button" @click="commands.undo">
-          Undo <i class="material-icons">undo</i>
+          <i class="material-icons">undo</i>
         </button>
         <button type="button" class="menubar__button" @click="commands.redo">
-          Redo <icon name="redo" />
+          <i class="material-icons">redo</i>
         </button>
       <button @click="testHandler(commands, isActive)">
           Test
@@ -125,7 +131,7 @@ import {
   TableRow,
   History
 } from 'tiptap-extensions';
-import Icon from './Icon';
+
 export default {
   name: 'TipTapEditor',
   props: {
@@ -136,14 +142,29 @@ export default {
   },
   components: {
     EditorContent,
-    EditorMenuBar,
-    Icon
+    EditorMenuBar
   },
   data() {
     return {
       editor: null,
       localHTML: '',  // TODO: Send back to parent component
       localJSON: {}
+      // ,
+      // selectedHeading: 1,
+      // headingOptions: [
+      //   {
+      //     name: 'Heading 1',
+      //     value: 1
+      //   },
+      //   {
+      //     name: 'Heading 2',
+      //     value: 2
+      //   },
+      //   {
+      //     name: 'Heading 3',
+      //     value: 3
+      //   }
+      // ]
     }
   },
   mounted() {
@@ -215,6 +236,13 @@ export default {
       console.log("LOCAL JSON--->>>", this.localJSON);
       console.log("CONTENT--->>>", this.editor.content);
     }
+    // ,
+    // headingHandler(commands, isActive) {
+    //   console.log("commands----->>>", commands);
+    //   console.log("isActive----->>>", isActive);
+    //   console.log("SELECTED HEADING--->>>", this.selectedHeading);
+    //   commands.heading({ level: this.selectedHeading });
+    // }
   }
 }
 </script>
@@ -234,8 +262,16 @@ export default {
   display: flex;
   flex-wrap: wrap;
 }
+
+.menubar__button {
+
+}
+
 table, td, th {
   border: 1px solid black !important;
+}
+td.selectedCell {
+  background-color: rgb(0, 173, 239, 0.2);
 }
 
 table {

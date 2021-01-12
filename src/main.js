@@ -4,11 +4,13 @@ import App from './App.vue';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 import './main.css';
+import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false
 
 new Vue({
-  render: h => h(App),
+  vuetify,
+  render: h => h(App)
 }).$mount('#app')
 
 // Vue.use(Vuetify);
